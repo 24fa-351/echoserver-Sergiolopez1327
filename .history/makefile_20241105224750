@@ -1,0 +1,41 @@
+# Compiler and flags
+CC = gcc
+CFLAGS = -pthread -Wall
+
+# Executable name
+TARGET = echo_server
+
+# Source files
+SRC = echo_server.c
+
+# Port for the test
+TEST_PORT = 1024
+
+# Target to compile the echo server
+$(TARGET): $(SRC)
+	$(CC) $(CFLAGS) -o $(TARGET) $(SRC)
+
+# Target to run tests and store output in test.txt
+test: $(TARGET)
+	# Start the server in the background
+	./$(TARGET) -p $(TEST_PORT) & \
+	SERVER_PID=$$!; \
+	sleep 1; \
+	# Run Telnet test
+	(echo "Test 1: Starting server and connecting via Telnet"; echo; \
+	echo "Command Run: telnet localhost $(TEST_PORT)"; echo; \
+	{ \
+		echo "How is Rex doing?"; \
+		sleep 1; \
+	} | telnet localhost $(TEST_PORT); \
+	echo; \
+	echo "Test complete. Check test.txt for results.") >> test.txt 2>&1; \
+	sleep 1; \
+	# Kill the server after the test
+	kill $$SERVER_PID
+
+# Target to clean up generated files
+clean:
+	rm -f $(TARGET) test.txt
+
+
