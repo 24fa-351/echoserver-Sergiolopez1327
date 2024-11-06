@@ -1,2 +1,0 @@
-#define PORT 50001
-#define LISTEN_BACKLOG 5

@@ -1,6 +1,0 @@
-main: main.c \
-		echo.c \
-		echo.h
-	gcc -o main main.c redirect.c split.c abspath.c
-
-
